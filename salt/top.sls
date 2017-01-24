@@ -1,7 +1,13 @@
 DEVEL:
-  'G@kernel:linux and G@os_family:Debian':
+#  'G@kernel:linux and G@os_family:Debian and G@roles:metrix':
+#    - match: compound
+#    - tick.repo.deb
+#  'G@kernel:linux and G@os_family:RedHat and G@roles:metrix':
+#    - match: compound
+#    - tick.repo.redhat
+  'G@roles:metrix':
     - match: compound
-    - tick.repo.deb
-  'G@kernel:linux and G@os_family:RedHat':
+    - tick.telegraf
+  'G@roles:influx':
     - match: compound
-    - tick.repo.redhat
+    - tick.influx
