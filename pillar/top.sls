@@ -1,4 +1,7 @@
 base:
-  '*':
-    - match: glob
-    - tick-DEVEL
+  'roles:influx':
+    - match: grain
+    - influx-DEVEL
+  'roles:metrix':
+    - match: grain
+    - metrix-DEVEL
