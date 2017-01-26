@@ -5,10 +5,17 @@
 [global_tags]
   osname = "{{ grains.os }}"
   osfamily = "{{ grains.os_family }}"
-  domain = "{{ grains.domain }}"
   osrelease = "{{ grains.osrelease }}"
   kernel = "{{ grains.kernel }}"
   virtual = "{{ grains.virtual }}"
+  init = "{{ grains.init }}"
+  environment = "{{ saltenv }}"
+  {% if grains.company is defined %}
+  company = {{ grains.company }}
+  {% endif %}
+  {% if grains.domain != "" %}
+  domain = "{{ grains.domain }}"
+  {% endif %}
 
 [agent]
   hostname = "{{ grains.fqdn }}"
@@ -49,31 +56,31 @@
 [[inputs.processes]]
 [[inputs.swap]]
 [[inputs.system]]
-[[inputs.win_perf_counters]]
 {% elif grains.kernel == 'Windows' %}
-[[inputs.win_perf_counters.object]]
-  Counters = ["% Idle Time", "% Interrupt Time", "% Privileged Time", "% User Time", "% Processor Time"]
-  Instances = ["*"]
-  Measurement = "win_cpu"
-  ObjectName = "Processor"
-[[inputs.win_perf_counters.object]]
-  Counters = ["% Idle Time", "% Disk Time", "% Disk Read Time", "% Disk Write Time", "% User Time", "Current Disk Queue Length"]
-  Instances = ["*"]
-  Measurement = "win_disk"
-  ObjectName = "LogicalDisk"
-[[inputs.win_perf_counters.object]]
-  Counters = ["Context Switches/sec", "System Calls/sec"]
-  Instances = ["------"]
-  Measurement = "win_system"
-  ObjectName = "System"
-[[inputs.win_perf_counters.object]]
-  Counters = ["Available Bytes", "Cache Faults/sec", "Demand Zero Faults/sec", "Page Faults/sec", "Pages/sec", "Transition Faults/sec", "Pool Nonpaged Bytes", "Pool Paged Bytes"]
-  Instances = ["------"]
-  Measurement = "win_mem"
-  ObjectName = "Memory"
-[[inputs.win_perf_counters.object]]
-  Counters = ["Bytes Received/sec", "Bytes Sent/sec", "Packets Received/sec", "Packets Sent/sec"]
-  Instances = ["*"]
-  Measurement = "win_net"
-  ObjectName = "Network Interface"
+[[inputs.win_perf_counters]]
+  [[inputs.win_perf_counters.object]]
+    Counters = ["% Idle Time", "% Interrupt Time", "% Privileged Time", "% User Time", "% Processor Time"]
+    Instances = ["*"]
+    Measurement = "win_cpu"
+    ObjectName = "Processor"
+  [[inputs.win_perf_counters.object]]
+    Counters = ["% Idle Time", "% Disk Time", "% Disk Read Time", "% Disk Write Time", "% User Time", "Current Disk Queue Length"]
+    Instances = ["*"]
+    Measurement = "win_disk"
+    ObjectName = "LogicalDisk"
+  [[inputs.win_perf_counters.object]]
+    Counters = ["Context Switches/sec", "System Calls/sec"]
+    Instances = ["------"]
+    Measurement = "win_system"
+    ObjectName = "System"
+  [[inputs.win_perf_counters.object]]
+    Counters = ["Available Bytes", "Cache Faults/sec", "Demand Zero Faults/sec", "Page Faults/sec", "Pages/sec", "Transition Faults/sec", "Pool Nonpaged Bytes", "Pool Paged Bytes"]
+    Instances = ["------"]
+    Measurement = "win_mem"
+    ObjectName = "Memory"
+  [[inputs.win_perf_counters.object]]
+    Counters = ["Bytes Received/sec", "Bytes Sent/sec", "Packets Received/sec", "Packets Sent/sec"]
+    Instances = ["*"]
+    Measurement = "win_net"
+    ObjectName = "Network Interface"
 {% endif%}

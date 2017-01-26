@@ -6,6 +6,8 @@ influxdb:
     - enable: True
     - watch:
       - file: /etc/influxdb/influxdb.conf
+    - require:
+      - file: /etc/influxdb/influxdb.conf
 
 /etc/influxdb/influxdb.conf:
   file.managed:
@@ -17,3 +19,5 @@ create_telegraf_db:
   cmd.run:
     - name: influx -execute "CREATE DATABASE telegraf"
     - unless: influx -execute "SHOW DATABASES" | grep telegraf
+    - require:
+      - service: influxdb

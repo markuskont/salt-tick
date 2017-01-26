@@ -9,15 +9,15 @@ boxes = [
   {
     :name       => "influx",
     :mem        => "2048",
-    :cpu        => "2",
+    :cpu        => "4",
     :ip         => "192.168.56.160",
     :image      => 'ubuntu/xenial64',
     :saltmaster => false
   },
   {
     :name       => "shipper-1",
-    :mem        => "1024",
-    :cpu        => "2",
+    :mem        => "2048",
+    :cpu        => "4",
     :ip         => "192.168.56.161",
     :image      => 'ubuntu/xenial64',
     :saltmaster => false
@@ -55,6 +55,7 @@ Vagrant.configure(2) do |config|
           salt.master_config = "vagrant/config/master"
         end
       end
+      config.vm.provision "shell", path: "./vagrant/scripts/devel_packages.sh"
       config.vm.provision "shell", path: "./vagrant/scripts/assign_roles.py"
     end
   end
