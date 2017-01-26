@@ -16,6 +16,7 @@ if 'influx' in hostname:
     grains['roles'].append('chronograf')
     grains['roles'].append('grafana')
     grains['roles'].append('alerta')
+    grains['roles'].append('ca')
 
 with open('/etc/salt/grains', 'w') as outfile:
     yaml.dump(grains, outfile, default_flow_style=False)

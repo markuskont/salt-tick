@@ -6,3 +6,9 @@ metrix:
     database: telegraf
     user: telegraf
     password: STRONK123
+  pki:
+    dir: /srv/pki-metrix
+    country: Estonia
+    state: Harjumaa
+    location: Tallinn
+    org: Cats&dogs ltd

@@ -6,7 +6,7 @@ file_roots:
 pillar_roots:
   base:
     - /vagrant/pillar/
-worker_threads: 1
+worker_threads: 3
 hash_type: sha256
 jinja_trim_blocks: True
 jinja_lstrip_blocks: True
@@ -14,3 +14,7 @@ jinja_lstrip_blocks: True
 client_acl:
   vagrant:
     - .*
+
+peer:
+  .*:
+    - x509.sign_remote_certificate

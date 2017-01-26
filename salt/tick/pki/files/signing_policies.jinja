@@ -1,0 +1,15 @@
+x509_signing_policies:
+  metrix:
+    - minions: '*'
+    - signing_private_key: {{ pillar.metrix.pki.dir }}/ca.key
+    - signing_cert: {{ pillar.metrix.pki.dir }}/ca.crt
+    - C: {{ pillar.metrix.pki.country }}
+    - ST: {{ pillar.metrix.pki.state }}
+    - L: {{ pillar.metrix.pki.location }}
+    - O: {{ pillar.metrix.pki.org }}
+    - basicConstraints: "critical CA:false"
+    - keyUsage: "critical keyEncipherment"
+    - subjectKeyIdentifier: hash
+    - authorityKeyIdentifier: keyid,issuer:always
+    - days_valid: 365
+    - copypath: {{ pillar.metrix.pki.dir }}/issued_certs/
