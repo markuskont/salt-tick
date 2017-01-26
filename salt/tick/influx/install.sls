@@ -6,18 +6,28 @@ influxdb:
     - enable: True
     - watch:
       - file: /etc/influxdb/influxdb.conf
+      - file: /etc/influxdb/ssl/key.pem
+      - file: /etc/influxdb/ssl/cert.pem
     - require:
       - file: /etc/influxdb/influxdb.conf
+      - file: /etc/influxdb/ssl/key.pem
+      - file: /etc/influxdb/ssl/cert.pem
 
 /etc/influxdb/influxdb.conf:
   file.managed:
     - mode: 644
     - source: salt://tick/influx/etc/influxdb/influxdb.conf
     - template: jinja
-
-create_telegraf_db:
-  cmd.run:
-    - name: influx -execute "CREATE DATABASE telegraf"
-    - unless: influx -execute "SHOW DATABASES" | grep telegraf
+    - default:
+      key: /etc/influxdb/ssl/key.pem
+      cert: /etc/influxdb/ssl/cert.pem
     - require:
-      - service: influxdb
+      - file: /etc/influxdb/ssl/key.pem
+      - file: /etc/influxdb/ssl/cert.pem
+
+#create_telegraf_db:
+#  cmd.run:
+#    - name: influx -execute "CREATE DATABASE telegraf"
+#    - unless: influx -execute "SHOW DATABASES" | grep telegraf
+#    - require:
+#      - service: influxdb

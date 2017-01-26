@@ -7,6 +7,8 @@ metrix:
     user: telegraf
     password: STRONK123
   pki:
+    server: influx
+    policy: metrix
     dir: /srv/pki-metrix
     country: Estonia
     state: Harjumaa
