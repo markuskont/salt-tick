@@ -15,6 +15,13 @@ salt-minion:
 {{ pillar.metrix.pki.dir }}/issued_certs:
   file.directory: []
 
+python-m2crypto:
+  pkg.installed
+
+{{ pillar.metrix.pki.dir }}/ca.key:
+  x509.private_key_managed:
+    - bits: 4096
+
 {{ pillar.metrix.pki.dir }}/ca.crt:
   x509.certificate_managed:
     - signing_private_key: {{ pillar.metrix.pki.dir }}/ca.key
@@ -30,12 +37,10 @@ salt-minion:
     - days_valid: 3650
     - days_remaining: 0
     - backup: True
-    - managed_private_key:
-        name: {{ pillar.metrix.pki.dir }}/ca.key
-        bits: 4096
-        backup: True
     - require:
       - file: {{ pillar.metrix.pki.dir }}
+      - pkg: python-m2crypto
+      - x509: {{ pillar.metrix.pki.dir }}/ca.key
 
 mine.send:
   module.run:
