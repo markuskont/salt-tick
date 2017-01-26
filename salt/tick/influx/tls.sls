@@ -1,3 +1,6 @@
+include:
+  - tick.common.m2crypto
+
 /etc/influxdb/ssl:
   file.directory:
     - mode: 750

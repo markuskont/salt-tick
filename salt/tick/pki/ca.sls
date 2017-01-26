@@ -1,3 +1,6 @@
+include:
+  - tick.common.m2crypto
+
 salt-minion:
   service.running:
     - enable: True
@@ -14,9 +17,6 @@ salt-minion:
 
 {{ pillar.metrix.pki.dir }}/issued_certs:
   file.directory: []
-
-python-m2crypto:
-  pkg.installed
 
 {{ pillar.metrix.pki.dir }}/ca.key:
   x509.private_key_managed:
@@ -42,10 +42,17 @@ python-m2crypto:
       - pkg: python-m2crypto
       - x509: {{ pillar.metrix.pki.dir }}/ca.key
 
-mine.send:
-  module.run:
-    - func: x509.get_pem_entries
-    - kwargs:
-        glob_path: {{ pillar.metrix.pki.dir }}/ca.crt
-    - onchanges:
+cp.push ca.crt:
+  module.wait:
+    - name: cp.push
+    - path: {{ pillar.metrix.pki.dir }}/ca.crt
+    - watch:
       - x509: {{ pillar.metrix.pki.dir }}/ca.crt
+
+#mine.send:
+#  module.run:
+#    - func: x509.get_pem_entries
+#    - kwargs:
+#        glob_path: {{ pillar.metrix.pki.dir }}/ca.crt
+#    - onchanges:
+#      - x509: {{ pillar.metrix.pki.dir }}/ca.crt

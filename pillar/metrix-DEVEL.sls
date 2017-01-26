@@ -1,7 +1,7 @@
 metrix:
   outputs:
     - db: telegraf
-      url: http://192.168.56.160:8086
+      url: https://192.168.56.160:8086
   influx:
     database: telegraf
     user: telegraf
