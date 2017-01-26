@@ -34,9 +34,15 @@
 # OUTPUTS:
 #
 {% for out in outputs %}
+{% if out.tls == true %}{% set proto = 'https' %}{% else %}{% set proto = 'http' %}{% endif %}
 [[outputs.influxdb]]
   database  = "{{ out.db }}"
-  urls  = ["{{ out.url }}"]
+  urls  = ["{{ proto }}://{{ out.host }}:{{ out.port }}"]
+  {% if out.tls == true %}
+  ssl_ca = "{{ out.cacert }}"
+  ssl_cert = "{{ out.cert }}"
+  ssl_key = "{{ out.key }}"
+  {% endif %}
 {% endfor %}
 
 #

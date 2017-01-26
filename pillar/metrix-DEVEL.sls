@@ -1,11 +1,14 @@
 metrix:
   outputs:
     - db: telegraf
-      url: https://192.168.56.160:8086
-  influx:
-    database: telegraf
-    user: telegraf
-    password: STRONK123
+      host: influx
+      port: 8086
+      tls: true
+      key: /etc/telegraf/ssl/key.pem
+      cert: /etc/telegraf/ssl/cert.pem
+      cacert: /etc/telegraf/ssl/ca.pem
+      user: telegraf
+      password: STRONK123
   pki:
     server: influx
     policy: metrix

@@ -10,8 +10,14 @@
     - enable: True
     - watch:
       - file: {{map.conf_dir}}/{{ map.service }}.conf
+      - file: /etc/telegraf/ssl/key.pem
+      - file: /etc/telegraf/ssl/cert.pem
+      - file: /etc/telegraf/ssl/ca.pem
     - require:
       - {{ map.conf_dir }}/{{ map.service }}.conf
+      - file: /etc/telegraf/ssl/key.pem
+      - file: /etc/telegraf/ssl/cert.pem
+      - file: /etc/telegraf/ssl/ca.pem
 {% elif grains['kernel'] == 'Windows' %}
 create_telegraf_dir:
   file.directory:
