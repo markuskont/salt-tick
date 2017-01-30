@@ -6,18 +6,6 @@
     - refresh: True
     - require:
       - pkgrepo: tick_repo
-  service.running:
-    - enable: True
-    - watch:
-      - file: {{map.conf_dir}}/{{ map.service }}.conf
-      - file: /etc/telegraf/ssl/key.pem
-      - file: /etc/telegraf/ssl/cert.pem
-      - file: /etc/telegraf/ssl/ca.pem
-    - require:
-      - {{ map.conf_dir }}/{{ map.service }}.conf
-      - file: /etc/telegraf/ssl/key.pem
-      - file: /etc/telegraf/ssl/cert.pem
-      - file: /etc/telegraf/ssl/ca.pem
 {% elif grains.kernel == 'Windows' and grains.cpuarch == 'AMD64' %}
 create_telegraf_dir:
   file.directory:
@@ -35,10 +23,4 @@ install_win_service:
     - shell: 'windows'
     - require:
       - '{{ map.conf_dir }}\{{ map.service }}.exe'
-ensure_telegraf_service:
-  service.running:
-    - name: {{ map.service }}
-    - enable: True
-    - watch:
-      - '{{ map.conf_dir }}\{{ map.service }}.conf'
 {% endif %}

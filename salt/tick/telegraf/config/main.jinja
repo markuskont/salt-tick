@@ -39,9 +39,9 @@
   database  = "{{ out.db }}"
   urls  = ["{{ proto }}://{{ out.host }}:{{ out.port }}"]
   {% if out.tls == true %}
-  ssl_ca = "{{ out.cacert }}"
-  ssl_cert = "{{ out.cert }}"
-  ssl_key = "{{ out.key }}"
+  ssl_ca = "{{ dir }}/{{ out.cacert }}"
+  ssl_cert = "{{ dir }}/{{ out.cert }}"
+  ssl_key = "{{ dir }}/{{ out.key }}"
   {% endif %}
 {% endfor %}
 

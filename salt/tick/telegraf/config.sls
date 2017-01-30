@@ -6,10 +6,23 @@
     - template: jinja
     - default:
       outputs: {{ pillar.metrix.outputs }}
-      key: {{ map.conf_dir }}/ssl/key.pem
-      cert: {{ map.conf_dir }}/ssl/cert.pem
-      cacert: {{ map.conf_dir }}/ssl/ca.pem
+      dir: {{ map.conf_dir }}
     - require:
       - file: {{ map.conf_dir }}/ssl/key.pem
       - file: {{ map.conf_dir }}/ssl/cert.pem
       - file: {{ map.conf_dir }}/ssl/ca.pem
+
+ensure_telegraf_service:
+  service.running:
+    - name: {{ map.service }}
+    - enable: True
+    - watch:
+      - file: {{map.conf_dir}}/{{ map.service }}.conf
+      - file: {{map.conf_dir}}/ssl/key.pem
+      - file: {{map.conf_dir}}/ssl/cert.pem
+      - file: {{map.conf_dir}}/ssl/ca.pem
+    - require:
+      - {{ map.conf_dir }}/{{ map.service }}.conf
+      - file: {{map.conf_dir}}/ssl/key.pem
+      - file: {{map.conf_dir}}/ssl/cert.pem
+      - file: {{map.conf_dir}}/ssl/ca.pem

@@ -4,9 +4,9 @@ metrix:
       host: influx
       port: 8086
       tls: true
-      key: /etc/telegraf/ssl/key.pem
-      cert: /etc/telegraf/ssl/cert.pem
-      cacert: /etc/telegraf/ssl/ca.pem
+      key: ssl/key.pem
+      cert: ssl/cert.pem
+      cacert: ssl/ca.pem
       user: telegraf
       password: STRONK123
   pki:
