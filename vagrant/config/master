@@ -1,6 +1,7 @@
 file_recv: True
 file_roots:
   DEVEL:
+    - /srv/salt/
     - /vagrant/salt
     - /var/cache/salt/master/minions
 pillar_roots:
@@ -10,6 +11,10 @@ worker_threads: 3
 hash_type: sha256
 jinja_trim_blocks: True
 jinja_lstrip_blocks: True
+
+#winrepo_dir: /srv/winrepo/win/repo
+#winrepo_dir_ng: /srv/winrepo/win/repo_ng
+#winrepo_mastercachefile: '/srv/winrepo/win/repo/winrepo.p'
 
 client_acl:
   vagrant:

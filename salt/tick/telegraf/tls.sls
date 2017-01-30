@@ -1,55 +1,65 @@
+{% from "tick/telegraf/map.jinja" import map with context %}
+
 include:
   - tick.common.m2crypto
 
-/etc/telegraf/ssl:
+{{ map.conf_dir }}/ssl:
   file.directory:
+    {% if grains.kernel == 'Linux' %}
     - mode: 750
-    - user: telegraf
+    {% endif %}
+    - user: {{ map.user }}
     - require:
+      {% if grains.kernel == 'Linux' %}
       - pkg: telegraf
+      {% elif grains.kernel == 'Windows' %}
+      - cmd: install_win_service
+      {% endif %}
 
-/etc/telegraf/ssl/telegraf.private:
+{{ map.conf_dir }}/ssl/telegraf.private:
   x509.private_key_managed:
     - bits: 4096
     - require:
-      - /etc/telegraf/ssl
+      - {{ map.conf_dir }}/ssl
 
-/etc/telegraf/ssl/telegraf.cert:
+{{ map.conf_dir }}/ssl/telegraf.cert:
   x509.certificate_managed:
     - ca_server: {{ pillar.metrix.pki.server }}
     - signing_policy: {{ pillar.metrix.pki.policy }}
     - CN: {{ grains.fqdn }}
     - days_remaining: 30
     - backup: True
-    - public_key: /etc/telegraf/ssl/telegraf.private
+    - public_key: {{ map.conf_dir }}/ssl/telegraf.private
     #- managed_private_key:
-    #  - name: /etc/telegraf/ssl/telegraf.private
+    #  - name: {{ map.conf_dir }}/ssl/telegraf.private
     #  - bits: 4096
     - require:
-      - file: /etc/telegraf/ssl
-      - x509: /etc/telegraf/ssl/telegraf.private
+      - file: {{ map.conf_dir }}/ssl
+      - x509: {{ map.conf_dir }}/ssl/telegraf.private
 
-/etc/telegraf/ssl/key.pem:
+{{ map.conf_dir }}/ssl/key.pem:
   file.managed:
-    - source:
-      - /etc/telegraf/ssl/telegraf.private
-    - user: telegraf
+    - source: '{{ map.conf_dir }}/ssl/telegraf.private'
+    - user: {{ map.user }}
+    {% if grains.kernel == 'Linux' %}
     - mode: 640
+    {% endif %}
     - require:
-      - /etc/telegraf/ssl/telegraf.private
-      - /etc/telegraf/ssl/telegraf.cert
+      - '{{ map.conf_dir }}/ssl/telegraf.private'
+      - '{{ map.conf_dir }}/ssl/telegraf.cert'
 
-/etc/telegraf/ssl/cert.pem:
+{{ map.conf_dir }}/ssl/cert.pem:
   file.managed:
-    - source:
-      - /etc/telegraf/ssl/telegraf.cert
-    - user: telegraf
+    - source: '{{ map.conf_dir }}/ssl/telegraf.cert'
+    - user: {{ map.user }}
+    {% if grains.kernel == 'Linux' %}
     - mode: 644
+    {% endif %}
     - require:
-      - /etc/telegraf/ssl/telegraf.private
-      - /etc/telegraf/ssl/telegraf.cert
+      - '{{ map.conf_dir }}/ssl/telegraf.private'
+      - '{{ map.conf_dir }}/ssl/telegraf.cert'
 
-/etc/telegraf/ssl/ca.pem:
+{{ map.conf_dir }}/ssl/ca.pem:
   file.managed:
     - source:
       - salt://{{pillar.metrix.pki.server}}/files{{pillar.metrix.pki.dir}}/ca.crt

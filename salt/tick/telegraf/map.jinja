@@ -1,10 +1,24 @@
 {% set map = salt['grains.filter_by']({
   'Linux': {
     'service': 'telegraf',
-    'conf_dir': '/etc/telegraf'
+    'conf_dir': '/etc/telegraf',
+    'user': 'telegraf',
+    'group': 'telegraf',
+    'mode': {
+      'dir': '0750',
+      'key': '0640',
+      'cert': '0644'
+    }
   },
   'Windows': {
     'service': 'telegraf',
-    'conf_dir': 'C:\Program Files\Telegraf'
+    'conf_dir': 'C:\Program Files\Telegraf',
+    'user': none,
+    'group': none,
+    'mode': {
+      'dir': none,
+      'key': none,
+      'cert': none
+    }
   }
 }, grain='kernel', merge=salt['pillar.get']('telegraf:lookup')) %}

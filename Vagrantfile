@@ -57,6 +57,9 @@ Vagrant.configure(2) do |config|
       end
       config.vm.provision "shell", path: "./vagrant/scripts/devel_packages.sh"
       config.vm.provision "shell", path: "./vagrant/scripts/assign_roles.py"
+      if opts[:saltmaster] == true
+        config.vm.provision "shell", path: "./vagrant/scripts/winrepo.sh"
+      end
     end
   end
 end
