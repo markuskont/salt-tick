@@ -3,6 +3,7 @@ file_roots:
   DEVEL:
     - /srv/salt/
     - /vagrant/salt
+    - /vagrant/vagrant
     - /var/cache/salt/master/minions
 pillar_roots:
   base:
