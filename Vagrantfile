@@ -5,12 +5,14 @@ SALT = 'stable' # stable|git|daily|testing
 # version to check out if using git
 SALT_VERSION = "v2016.11.2"
 
+INFLUX_IP = '192.168.56.160'
+
 boxes = [
   {
     :name       => "influx",
     :mem        => "2048",
     :cpu        => "4",
-    :ip         => "192.168.56.160",
+    :ip         => INFLUX_IP,
     :image      => 'ubuntu/xenial64',
     :saltmaster => false
   },
@@ -45,6 +47,8 @@ Vagrant.configure(2) do |config|
       end
       config.vm.provision "shell",
         inline: "grep salt /etc/hosts || sudo echo \"#{MASTER_IP}\"  salt >> /etc/hosts"
+      config.vm.provision "shell",
+        inline: "grep influx /etc/hosts || sudo echo \"#{INFLUX_IP}\"  influx >> /etc/hosts"
       config.vm.provision :salt do |salt|
         salt.minion_config = "vagrant/config/minion"
         salt.masterless = false

@@ -17,6 +17,10 @@ jinja_lstrip_blocks: True
 #winrepo_dir_ng: /srv/winrepo/win/repo_ng
 #winrepo_mastercachefile: '/srv/winrepo/win/repo/winrepo.p'
 
+reactor:
+  - 'minion_start':
+    - /vagrant/reactor/sync_grains.sls
+
 client_acl:
   vagrant:
     - .*
