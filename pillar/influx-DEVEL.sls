@@ -7,9 +7,9 @@ influx:
   users:
     telegraf: STRONK123
     grafana: WEEK456
+    kapa: SLEEP873
   databases:
-    telegraf:
-      write:
-        - telegraf
-      read:
-        - grafana
+    - telegraf
+    - test
+    - test1
+    - test2

@@ -5,3 +5,26 @@ create_admin_user:
     - require:
       - file: /etc/influxdb/influxdb.conf
       - service: influxdb
+
+/etc/influxdb/helpers:
+  file.directory:
+    - mode: 750
+    - require:
+      - cmd: create_admin_user
+
+/etc/influxdb/helpers/check_db.py:
+  file.managed:
+    - source: salt://tick/influx/etc/influxdb/helpers/check_db.py
+    - mode: 750
+    - user: influxdb
+    - require:
+      - file: /etc/influxdb/helpers
+
+create_databases:
+  cmd.script:
+    - name: /etc/influxdb/helpers/check_db.py
+    - unless: /etc/influxdb/helpers/check_db.py --check -f {{ grains.fqdn }} -u {{ pillar.influx.admin.user }} -p {{ pillar.influx.admin.pw }} -d {{ pillar.influx.databases|join(' ') }}
+    - args: -f {{ grains.fqdn }} -u {{ pillar.influx.admin.user }} -p {{ pillar.influx.admin.pw }} -d {{ pillar.influx.databases|join(' ') }}
+    - require:
+      - cmd: create_admin_user
+      - file: /etc/influxdb/helpers/check_db.py
