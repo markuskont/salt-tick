@@ -15,7 +15,7 @@ influx:
     - test2
   grants:
     telegraf:
-      telegraf: ALL
+      telegraf: WRITE
     grafana:
       telegraf: READ
     kapa:
