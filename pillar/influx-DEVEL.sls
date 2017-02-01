@@ -13,3 +13,10 @@ influx:
     - test
     - test1
     - test2
+  grants:
+    telegraf:
+      telegraf: ALL
+    grafana:
+      telegraf: READ
+    kapa:
+      telegraf: READ
