@@ -8,6 +8,7 @@
       outputs: {{ pillar.metrix.outputs }}
       dir: {{ map.conf_dir }}
     - require:
+      - pkg: {{ map.service }}
       - file: {{ map.conf_dir }}/ssl/key.pem
       - file: {{ map.conf_dir }}/ssl/cert.pem
       - file: {{ map.conf_dir }}/ssl/ca.pem

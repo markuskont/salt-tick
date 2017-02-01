@@ -1,4 +1,8 @@
 master: salt
 mine_interval: 1
 environment: DEVEL
+state_top_saltenv: DEVEL
 #pillarenv: DEVEL
+
+grains:
+  env: DEVEL

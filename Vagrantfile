@@ -14,7 +14,8 @@ boxes = [
     :cpu        => "4",
     :ip         => INFLUX_IP,
     :image      => 'ubuntu/xenial64',
-    :saltmaster => false
+    :saltmaster => false,
+    :saltenv    => 'DEVEL'
   },
   {
     :name       => "shipper-1",
@@ -22,7 +23,17 @@ boxes = [
     :cpu        => "4",
     :ip         => "192.168.56.161",
     :image      => 'ubuntu/xenial64',
-    :saltmaster => false
+    :saltmaster => false,
+    :saltenv    => 'DEVEL'
+  },
+  {
+    :name       => "shipper-2",
+    :mem        => "512",
+    :cpu        => "1",
+    :ip         => "192.168.56.162",
+    :image      => 'ubuntu/xenial64',
+    :saltmaster => false,
+    :saltenv    => 'TEST'
   },
   {
     :name       => "saltmaster",
@@ -63,6 +74,9 @@ Vagrant.configure(2) do |config|
       config.vm.provision "shell", path: "./vagrant/scripts/assign_roles.py"
       if opts[:saltmaster] == true
         config.vm.provision "shell", path: "./vagrant/scripts/winrepo.sh"
+      else
+        config.vm.provision "shell",
+          inline: "sudo sed -i s/DEVEL/\"#{opts[:saltenv]}\"/g /etc/salt/minion && service salt-minion restart"
       end
     end
   end
