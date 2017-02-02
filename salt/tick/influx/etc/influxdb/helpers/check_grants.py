@@ -80,20 +80,23 @@ def check_grants(result, pillar):
     diff = {}
     for user in pillar.keys():
         perms = pillar[user]['perms']
-        if result[user] == None:
-            diff[user] = perms
+        if user in result:
+            if result[user] == None:
+                diff[user] = perms
+            else:
+                for db, perm in perms.items():
+                    if db in result[user]:
+                        if perm != result[user][db]:
+                            if perm == 'ALL' and result[user][db] == 'ALL PRIVILEGES':
+                                pass
+                            else:
+                                if user not in diff:
+                                    diff[user] = {}
+                                diff[user][db] = perm
+                    else:
+                        pass
         else:
-            for db, perm in perms.items():
-                if db in result[user]:
-                    if perm != result[user][db]:
-                        if perm == 'ALL' and result[user][db] == 'ALL PRIVILEGES':
-                            pass
-                        else:
-                            if user not in diff:
-                                diff[user] = {}
-                            diff[user][db] = perm
-                else:
-                    pass
+            diff[user] = perms
     return diff
 
 def set_databases(databases):
