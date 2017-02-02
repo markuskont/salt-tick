@@ -4,19 +4,16 @@ influx:
   admin:
     user: admin
     pw: test1234
-  users:
-    telegraf: STRONK123
-    grafana: WEEK456
-    kapa: SLEEP873
-  databases:
-    - telegraf
-    - test
-    - test1
-    - test2
   grants:
     telegraf:
-      telegraf: WRITE
+      pass: STRONK123
+      perms:
+        telegraf: WRITE
     grafana:
-      telegraf: READ
+      pass: WEEK456
+      perms:
+        telegraf: READ
     kapa:
-      telegraf: READ
+      pass: SLEEP873
+      perms:
+        telegraf: ALL
