@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# usage:
+# ./check_grants.py  -u admin -p test1234 -f influx -d '{"telegraf":{"perms":{"telegraf":"WRITE","test":"READ"},"pass":"asdasdd"},"vova":{"perms":{"test5":"WRITE","test4":"READ"},"pass":"test234"},"asd":{"perms":{"telegraf":"READ","test5": "ALL"},"pass":"asdmk"}}'
+
 import sys, json, argparse
 import requests, urllib
 

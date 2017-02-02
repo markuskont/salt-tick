@@ -26,15 +26,15 @@ boxes = [
     :saltmaster => false,
     :saltenv    => 'DEVEL'
   },
-  {
-    :name       => "shipper-2",
-    :mem        => "512",
-    :cpu        => "1",
-    :ip         => "192.168.56.162",
-    :image      => 'ubuntu/xenial64',
-    :saltmaster => false,
-    :saltenv    => 'TEST'
-  },
+  #{
+  #  :name       => "shipper-2",
+  #  :mem        => "512",
+  #  :cpu        => "1",
+  #  :ip         => "192.168.56.162",
+  #  :image      => 'ubuntu/xenial64',
+  #  :saltmaster => false,
+  #  :saltenv    => 'TEST'
+  #},
   {
     :name       => "saltmaster",
     :mem        => "512",
