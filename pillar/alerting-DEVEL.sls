@@ -1,4 +1,4 @@
-metrix:
+kapacitor:
   outputs:
     - db: telegraf
       host: influx
@@ -12,8 +12,8 @@ metrix:
   pki:
     server: influx
     policy: metrix
-    dir: /srv/pki-metrix
+    dir: /srv/pki-kapacitor
     country: Estonia
     state: Harjumaa
     location: Tallinn
-    org: Cats&dogs ltd
+    org: Cats&dogs&cows ltd

@@ -28,3 +28,5 @@ create_databases:
     - require:
       - cmd: create_admin_user
       - file: /etc/influxdb/helpers/check_grants.py
+      - service: influxdb
+      - file: /etc/influxdb/influxdb.conf

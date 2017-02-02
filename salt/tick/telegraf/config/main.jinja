@@ -43,6 +43,8 @@
   ssl_cert = "{{ dir }}/{{ out.cert }}"
   ssl_key = "{{ dir }}/{{ out.key }}"
   {% endif %}
+  username = "{{ out.username }}"
+  password = "{{ out.password }}"
 {% endfor %}
 
 #
