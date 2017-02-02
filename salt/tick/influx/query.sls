@@ -27,4 +27,4 @@ create_databases:
     - args: -f {{ grains.fqdn }} -u {{ pillar.influx.admin.user }} -p {{ pillar.influx.admin.pw }} -d {{ pillar.influx.grants|json|replace(' ', '') }}
     - require:
       - cmd: create_admin_user
-      - file: /etc/influxdb/helpers/check_db.py
+      - file: /etc/influxdb/helpers/check_grants.py
