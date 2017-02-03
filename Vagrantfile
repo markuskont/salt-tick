@@ -13,7 +13,7 @@ boxes = [
     :mem        => "2048",
     :cpu        => "4",
     :ip         => INFLUX_IP,
-    :image      => 'ubuntu/xenial64',
+    :image      => 'debian/jessie64',
     :saltmaster => false,
     :saltenv    => 'DEVEL'
   },
@@ -31,7 +31,7 @@ boxes = [
     :mem        => "1024",
     :cpu        => "2",
     :ip         => "192.168.56.162",
-    :image      => 'ubuntu/xenial64',
+    :image      => 'ubuntu/trusty64',
     :saltmaster => false,
     :saltenv    => 'DEVEL'
   },

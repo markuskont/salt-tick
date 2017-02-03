@@ -1,3 +1,5 @@
+{% set os = grains.get('os')|lower %}
+
 grafana:
   pkgrepo.managed:
     - humanname: Grafana repository

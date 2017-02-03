@@ -1,3 +1,8 @@
+ensure_pkgs:
+  pkg.installed:
+    - pkgs:
+      - curl
+
 create_admin_user:
   cmd.run:
     - name: curl -ss -k -XPOST https://{{ grains.fqdn }}:8086/query --data-urlencode "q=CREATE USER "{{ pillar.influx.admin.user }}" WITH PASSWORD '{{ pillar.influx.admin.pw }}' WITH ALL PRIVILEGES"
@@ -5,6 +10,7 @@ create_admin_user:
     - require:
       - file: /etc/influxdb/influxdb.conf
       - service: influxdb
+      - pkg: ensure_pkgs
 
 /etc/influxdb/helpers:
   file.directory:
@@ -19,6 +25,7 @@ create_admin_user:
     - user: influxdb
     - require:
       - file: /etc/influxdb/helpers
+      - cmd: create_admin_user
 
 create_databases:
   cmd.script:
