@@ -3,6 +3,10 @@ var info = 40
 var warn = 60
 var crit = 75
 
+var sig_info = 3
+var sig_warn = 4
+var sig_crit = 5
+
 var period = 1m
 var every = 1m
 
@@ -27,17 +31,19 @@ var data = stream
 
 var alert = data
   |alert()
-    .id('[kapacitor] {{ index .Tags "host"}} | {{ index .Tags "path"}}')
+    .id('[kapacitor] {{ index .Tags "host"}}')
     .message('{{ .ID }} is {{ .Level }} value: {{ index .Value "stat"}}')
-    .info(lambda: "stat" > info)
-    .warn(lambda: "stat" > warn)
-    .crit(lambda: "stat" > crit)
+
+var static = alert
+  .info(lambda: "stat" > info)
+  .warn(lambda: "stat" > warn)
+  .crit(lambda: "stat" > crit)
+
+static
+  .alerta()
+    .value('{{ index .Fields "stat" }}')
+    .resource('{{ index .Tags "host"}}')
 
 //alert
 //  .stateChangesOnly(suppress)
 //  .email()
-
-alert
-  .alerta()
-    .value('{{ index .Fields "stat" }}')
-    .resource('{{ index .Tags "host"}}')
