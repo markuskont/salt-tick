@@ -77,31 +77,27 @@ default-retention-policy = ""
 # Multiple InfluxDB configurations can be defined.
 # Exactly one must be marked as the default.
 # Each one will be given a name and can be referenced in batch queries and InfluxDBOut nodes.
-{% for server, addrs in salt['mine.get']('influx*', 'network.ip_addrs', expr_form='glob') | dictsort() %}
+{% for name, params in pillar.alerting.influx.items() %}
 [[influxdb]]
-  enabled = true
-  {% if loop.index == 1 %}
-  default = true
-  {% else %}
-  default = false
-  {% endif %}
-  name = "{{server}}"
-  urls = ["http://{{addrs[0]}}:8086"]
-  username = ""
-  password = ""
-  timeout = 0
+  name = "{{ name }}"
+  enabled = {{ params.enabled }}
+  default = {{ params.default }}
+  urls = [{{ params.urls|join(", ") }}]
+  username = "{{ params.username }}"
+  password = "{{ params.password }}"
+  timeout = {{ params.timeout }}
+  {% if params.tls == true %}
+  ssl-ca = "{{ conf_dir }}/{{ params.ssl.ca }}"
+  ssl-cert = "{{ conf_dir }}/{{ params.ssl.cert }}"
+  ssl-key = "{{ conf_dir }}/{{ params.ssl.key }}"
   insecure-skip-verify = false
-  startup-timeout = "5m"
-  disable-subscriptions = false
-  subscription-protocol = "http"
-  subscriptions-sync-interval = "1m0s"
-  kapacitor-hostname = ""
-  http-port = 0
-  udp-bind = ""
+  {% endif %}
   udp-buffer = 1000
   udp-read-buffer = 0
   [influxdb.subscriptions]
-    telegraf = [ "default","autogen" ]
+    {% for sub, retentions in params.subscriptions.items() %}
+    {{ sub }} =[{{ retentions|join(", ") }}]
+    {% endfor %}
   [influxdb.excluded-subscriptions]
 {% endfor %}
 

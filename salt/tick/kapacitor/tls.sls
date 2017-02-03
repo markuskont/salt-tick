@@ -1,32 +1,32 @@
 include:
   - tick.common.m2crypto
 
-{% set conf_dir = '/etc/influxdb' %}
+{% set conf_dir = '/etc/kapacitor' %}
 
 {{ conf_dir }}/ssl:
   file.directory:
     - mode: 750
-    - user: influxdb
+    - user: kapacitor
     - require:
-      - pkg: influxdb
+      - pkg: kapacitor
       - pkg: python-m2crypto
 
-{{ conf_dir }}/ssl/influx.private:
+{{ conf_dir }}/ssl/kapacitor.private:
   x509.private_key_managed:
     - bits: 4096
     - require:
       - {{ conf_dir }}/ssl
 
-{{ conf_dir }}/ssl/influx.cert:
+{{ conf_dir }}/ssl/kapacitor.cert:
   x509.certificate_managed:
     - ca_server: {{ pillar.metrix.pki.server }}
     - signing_policy: {{ pillar.metrix.pki.policy }}
     - CN: {{ grains.fqdn }}
     - days_remaining: 30
     - backup: True
-    - public_key: {{ conf_dir }}/ssl/influx.private
+    - public_key: {{ conf_dir }}/ssl/kapacitor.private
     #- managed_private_key:
-    #  - name: {{ conf_dir }}/ssl/influx.private
+    #  - name: {{ conf_dir }}/ssl/kapacitor.private
     #  - bits: 4096
     - require:
       - file: {{ conf_dir }}/ssl
@@ -34,19 +34,19 @@ include:
 {{ conf_dir }}/ssl/key.pem:
   file.managed:
     - source:
-      - {{ conf_dir }}/ssl/influx.private
-    - user: influxdb
+      - {{ conf_dir }}/ssl/kapacitor.private
+    - user: kapacitor
     - mode: 640
     - require:
-      - {{ conf_dir }}/ssl/influx.private
-      - {{ conf_dir }}/ssl/influx.cert
+      - {{ conf_dir }}/ssl/kapacitor.private
+      - {{ conf_dir }}/ssl/kapacitor.cert
 
 {{ conf_dir }}/ssl/cert.pem:
   file.managed:
     - source:
-      - {{ conf_dir }}/ssl/influx.cert
-    - user: influxdb
+      - {{ conf_dir }}/ssl/kapacitor.cert
+    - user: kapacitor
     - mode: 644
     - require:
-      - {{ conf_dir }}/ssl/influx.private
-      - {{ conf_dir }}/ssl/influx.cert
+      - {{ conf_dir }}/ssl/kapacitor.private
+      - {{ conf_dir }}/ssl/kapacitor.cert
