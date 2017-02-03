@@ -1,12 +1,12 @@
 alerting:
   influx:
     {{ grains.fqdn }}:
-      default: true
-      enabled: true
+      default: 'true'
+      enabled: 'true'
       urls:
         - '"https://{{ grains.fqdn }}:8086"'
-      username: kapa
-      password: SLEEP873
+      username: admin
+      password: test1234
       timeout: 0
       tls: true
       ssl:

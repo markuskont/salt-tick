@@ -50,3 +50,8 @@ include:
     - require:
       - {{ conf_dir }}/ssl/influx.private
       - {{ conf_dir }}/ssl/influx.cert
+
+{{ conf_dir }}/ssl/ca.pem:
+  file.managed:
+    - source:
+      - salt://{{pillar.metrix.pki.server}}/files{{pillar.metrix.pki.dir}}/ca.crt

@@ -14,8 +14,3 @@ influx:
       perms:
         telegraf: READ
         writeback: READ
-    kapa:
-      pass: SLEEP873
-      perms:
-        telegraf: ALL
-        writeback: ALL
