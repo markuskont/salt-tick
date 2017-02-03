@@ -101,12 +101,12 @@ default-retention-policy = ""
   [influxdb.excluded-subscriptions]
 {% endfor %}
 
-{% for server, addrs in salt['mine.get']('alerta*', 'network.ip_addrs', expr_form='glob') | dictsort() %}
+{% for server in pillar.alerting.alerta %}
 [alerta]
   enabled = true
-  url = "http://{{addrs[0]}}:8080"
+  url = "http://{{ server }}"
   token = ""
-  environment = "Production"
+  environment = "{{ saltenv }}"
   origin = "kapacitor"
 {% endfor %}
 
