@@ -1,0 +1,11 @@
+{%- set ip4_interfaces = grains['ip4_interfaces'] -%}
+DEBUG = True
+BASE_URL = ''
+LOGGER_NAME = 'alerta'
+LOG_FILE = None
+
+CORS_ORIGINS = [
+{% for interface, addrs in ip4_interfaces.items() %}
+	'http://{{addrs[0]}}',
+{% endfor %}
+]

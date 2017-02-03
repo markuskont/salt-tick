@@ -18,6 +18,15 @@ boxes = [
     :saltenv    => 'DEVEL'
   },
   {
+    :name       => "alerta",
+    :mem        => "1024",
+    :cpu        => "2",
+    :ip         => INFLUX_IP,
+    :image      => 'ubuntu/xenial64',
+    :saltmaster => false,
+    :saltenv    => 'DEVEL'
+  },
+  {
     :name       => "shipper-1",
     :mem        => "2048",
     :cpu        => "4",

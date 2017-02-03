@@ -1,0 +1,12 @@
+description    "Alerta API process"
+author         "CCDCOE"
+
+start on startup
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+
+script
+  exec alertad 2>&1 | logger -t alerta-server -p daemon.notice
+end script

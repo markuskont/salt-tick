@@ -1,0 +1,15 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server ipv6only=on;
+
+	root /srv/www/{{ grains.fqdn }}/app;
+	index index.html index.htm;
+
+	server_name {{ grains.fqdn }};
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+        access_log /var/log/nginx/{{ grains.fqdn }}.log;
+        error_log /var/log/nginx/{{ grains.fqdn }}.err;
+}

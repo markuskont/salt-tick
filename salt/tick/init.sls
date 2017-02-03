@@ -24,6 +24,17 @@ tick.kapacitor_setup:
       - salt: tick.influxdb_setup
     - saltenv: {{ saltenv }}
 
+tick.alerta_setup:
+  salt.state:
+    - tgt: 'G@roles:alerta and G@env:{{ saltenv }}'
+    - tgt_type: compound
+    - sls: tick.alerta
+    - require:
+      - salt: tick.influx_ca_setup
+      - salt: tick.influxdb_setup
+      - salt: tick.kapacitor_setup
+    - saltenv: {{ saltenv }}
+
 tick.metrix_agent_setup:
   salt.state:
     - tgt: 'G@roles:metrix and G@env:{{ saltenv }}'
