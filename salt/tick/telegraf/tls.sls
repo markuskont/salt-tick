@@ -21,6 +21,7 @@ include:
     - bits: 4096
     - require:
       - {{ map.conf_dir }}/ssl
+      - pkg: python-m2crypto
 
 {{ map.conf_dir }}/ssl/telegraf.cert:
   x509.certificate_managed:
@@ -34,6 +35,7 @@ include:
     #  - name: {{ map.conf_dir }}/ssl/telegraf.private
     #  - bits: 4096
     - require:
+      - pkg: python-m2crypto
       - file: {{ map.conf_dir }}/ssl
       - x509: {{ map.conf_dir }}/ssl/telegraf.private
 

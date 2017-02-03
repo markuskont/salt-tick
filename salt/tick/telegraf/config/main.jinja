@@ -11,7 +11,7 @@
   init = "{{ grains.init }}"
   environment = "{{ saltenv }}"
   {% if grains.company is defined %}
-  company = {{ grains.company }}
+  company = "{{ grains.company }}"
   {% endif %}
   {% if grains.domain != "" %}
   domain = "{{ grains.domain }}"
