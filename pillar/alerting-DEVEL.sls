@@ -17,3 +17,5 @@ alerting:
         telegraf:
           - '"default"'
           - '"autogen"'
+  alerta:
+    - {{ grains.fqdn }}:8080

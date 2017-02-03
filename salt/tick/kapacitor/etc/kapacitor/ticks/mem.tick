@@ -1,0 +1,44 @@
+// Parameters
+var info = 75
+var warn = 80
+var crit = 90
+
+var period = 1m
+var every = 1m
+
+var suppress = 5m
+
+var db = 'telegraf'
+var rp = 'autogen'
+
+var measure = 'mem'
+
+var data = stream
+  |from()
+    .database(db)
+    .retentionPolicy(rp)
+    .measurement('mem')
+    //.where(lambda: "team" != 'yellow' )
+    .groupBy('host')
+  |window()
+    .period(period)
+    .every(every)
+  |min('used_percent')
+    .as('stat')
+
+var alert = data
+  |alert()
+    .id('[kapacitor] {{ index .Tags "host"}} | {{ index .Tags "path"}}')
+    .message('{{ .ID }} is {{ .Level }} value: {{ index .Value "stat"}}')
+    .info(lambda: "stat" > info)
+    .warn(lambda: "stat" > warn)
+    .crit(lambda: "stat" > crit)
+
+//alert
+//  .stateChangesOnly(suppress)
+//  .email()
+
+alert
+  .alerta()
+    .value('{{ index .Fields "stat" }}')
+    .resource('{{ index .Tags "host"}}')

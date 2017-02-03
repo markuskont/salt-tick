@@ -1,0 +1,43 @@
+// Parameters
+var info = 40
+var warn = 60
+var crit = 75
+
+var period = 1m
+var every = 1m
+
+var suppress = 5m
+
+var db = 'telegraf'
+var rp = 'autogen'
+
+var data = stream
+  |from()
+    .database(db)
+    .retentionPolicy(rp)
+    .measurement('cpu')
+    .where(lambda: "cpu" == 'cpu-total')
+    //.where(lambda: "team" != 'yellow' )
+    .groupBy('host')
+  |window()
+    .period(period)
+    .every(every)
+  |min('usage_iowait')
+    .as('stat')
+
+var alert = data
+  |alert()
+    .id('[kapacitor] {{ index .Tags "host"}} | {{ index .Tags "path"}}')
+    .message('{{ .ID }} is {{ .Level }} value: {{ index .Value "stat"}}')
+    .info(lambda: "stat" > info)
+    .warn(lambda: "stat" > warn)
+    .crit(lambda: "stat" > crit)
+
+//alert
+//  .stateChangesOnly(suppress)
+//  .email()
+
+alert
+  .alerta()
+    .value('{{ index .Fields "stat" }}')
+    .resource('{{ index .Tags "host"}}')

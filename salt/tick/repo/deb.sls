@@ -1,6 +1,7 @@
 {% set os = grains.get('os')|lower %}
-apt-transport-https:
-  pkg.installed
+include:
+  - tick.common.apt-https
+
 tick_repo:
   pkgrepo.managed:
     - humanname: TICK stack repository from Influxdata

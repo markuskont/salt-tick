@@ -14,6 +14,17 @@ tick.influxdb_setup:
       - salt: tick.influx_ca_setup
     - saltenv: {{ saltenv }}
 
+tick.grafana_setup:
+  salt.state:
+    - tgt: 'G@roles:grafana and G@env:{{ saltenv }}'
+    - tgt_type: compound
+    - sls: tick.grafana
+    - require:
+      - salt: tick.influx_ca_setup
+      - salt: tick.influxdb_setup
+      - salt: tick.kapacitor_setup
+    - saltenv: {{ saltenv }}
+
 tick.kapacitor_setup:
   salt.state:
     - tgt: 'G@roles:kapacitor and G@env:{{ saltenv }}'
