@@ -12,6 +12,7 @@ alerta_build_pkgs:
       - bcrypt
       - python-bcrypt
       - libffi-dev
+      - git
 
 {% for package in ['bcrypt', 'click', 'Werkzeug', 'itsdangerous'] %}
 {{package}}:
@@ -79,17 +80,17 @@ alerta_webui:
     - name: https://github.com/alerta/angular-alerta-webui
     - target: /srv/www/{{grains['fqdn']}}
     - require:
-      - pkg: basic.packages
+      - pkg: alerta_build_pkgs
 
 /srv/www/{{grains['fqdn']}}/app/config.js:
   file.managed:
-    - source: salt://tic/alerta/srv/www/app/config.js
+    - source: salt://tick/alerta/srv/www/app/config.js
     - mode: 640
     - user: www-data
 
 /etc/nginx/sites-available/{{grains['fqdn']}}:
   file.managed:
-    - source: salt://tick/etc/nginx/sites-available/default.jinja
+    - source: salt://tick/alerta/etc/nginx/sites-available/default.jinja
     - template: jinja
     - mode: 644
 

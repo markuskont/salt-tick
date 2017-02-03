@@ -18,19 +18,19 @@ boxes = [
     :saltenv    => 'DEVEL'
   },
   {
-    :name       => "alerta",
+    :name       => "shipper-1",
     :mem        => "1024",
     :cpu        => "2",
-    :ip         => INFLUX_IP,
+    :ip         => "192.168.56.161",
     :image      => 'ubuntu/xenial64',
     :saltmaster => false,
     :saltenv    => 'DEVEL'
   },
   {
-    :name       => "shipper-1",
-    :mem        => "2048",
-    :cpu        => "4",
-    :ip         => "192.168.56.161",
+    :name       => "alerta",
+    :mem        => "1024",
+    :cpu        => "2",
+    :ip         => "192.168.56.162",
     :image      => 'ubuntu/xenial64',
     :saltmaster => false,
     :saltenv    => 'DEVEL'
@@ -39,7 +39,7 @@ boxes = [
   #  :name       => "shipper-2",
   #  :mem        => "512",
   #  :cpu        => "1",
-  #  :ip         => "192.168.56.162",
+  #  :ip         => "192.168.56.163",
   #  :image      => 'ubuntu/xenial64',
   #  :saltmaster => false,
   #  :saltenv    => 'TEST'

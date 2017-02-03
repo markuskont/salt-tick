@@ -35,13 +35,13 @@ tick.alerta_setup:
       - salt: tick.kapacitor_setup
     - saltenv: {{ saltenv }}
 
-tick.metrix_agent_setup:
-  salt.state:
-    - tgt: 'G@roles:metrix and G@env:{{ saltenv }}'
-    - tgt_type: compound
-    - sls: tick.metrix
-    - require:
-      - salt: tick.influx_ca_setup
-      - salt: tick.influxdb_setup
-      - salt: tick.kapacitor_setup
-    - saltenv: {{ saltenv }}
+#tick.metrix_agent_setup:
+#  salt.state:
+#    - tgt: 'G@roles:metrix and G@env:{{ saltenv }}'
+#    - tgt_type: compound
+#    - sls: tick.telegraf
+#    - require:
+#      - salt: tick.influx_ca_setup
+#      - salt: tick.influxdb_setup
+#      - salt: tick.kapacitor_setup
+#    - saltenv: {{ saltenv }}

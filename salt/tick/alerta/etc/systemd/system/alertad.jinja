@@ -3,7 +3,7 @@ Description=Alerta API process
 After=network.target
 
 [Service]
-ExecStart=alertad 2>&1 | logger -t alerta-server -p daemon.notice
+ExecStart=/usr/local/bin/alertad
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

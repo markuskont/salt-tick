@@ -11,6 +11,13 @@ include:
       - pkg: kapacitor
       - pkg: python-m2crypto
 
+{{ conf_dir }}/ssl/ca.pem:
+  file.managed:
+    - source:
+      - salt://{{pillar.metrix.pki.server}}/files{{pillar.metrix.pki.dir}}/ca.crt
+    - require:
+      - {{ conf_dir }}/ssl
+
 {{ conf_dir }}/ssl/kapacitor.private:
   x509.private_key_managed:
     - bits: 4096
@@ -50,8 +57,3 @@ include:
     - require:
       - {{ conf_dir }}/ssl/kapacitor.private
       - {{ conf_dir }}/ssl/kapacitor.cert
-
-{{ conf_dir }}/ssl/ca.pem:
-  file.managed:
-    - source:
-      - salt://{{pillar.metrix.pki.server}}/files{{pillar.metrix.pki.dir}}/ca.crt
