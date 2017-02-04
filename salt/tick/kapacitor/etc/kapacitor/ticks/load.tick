@@ -1,7 +1,7 @@
 // Parameters
-var info = 75
-var warn = 80
-var crit = 90
+var info_sig = 3
+var warn_sig = 4
+var crit_sig = 5
 
 var period = 1m
 var every = 1m
@@ -15,22 +15,26 @@ var linux = stream
   |from()
     .database(db)
     .retentionPolicy(rp)
-    .measurement('disk')
+    .measurement('system')
     //.where(lambda: "team" != 'yellow' )
-    .groupBy('host', 'path')
+    .groupBy('host')
   |window()
     .period(period)
     .every(every)
-  |max('used_percent')
+  |max('load1')
     .as('stat')
+  |eval(lambda: sigma("stat"))
+    .as('sigma')
+    .keep()
 
 linux
+  |log()
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} Disk usage is {{ .Level }} value: {{ index .Fields "stat"}}')
-    .info(lambda: "stat" > info)
-    .warn(lambda: "stat" > warn)
-    .crit(lambda: "stat" > crit)
+    .message('{{ .ID }} Load1 is {{ .Level }} value: {{ index .Fields "stat"}} Sigma: {{ index .Fields "sigma" }}')
+    .info(lambda: "sigma" > info_sig)
+    .warn(lambda: "sigma" > warn_sig)
+    .crit(lambda: "sigma" > crit_sig)
     .alerta()
       .value('{{ index .Fields "stat" }}')
       .resource('{{ index .Tags "host"}}')
