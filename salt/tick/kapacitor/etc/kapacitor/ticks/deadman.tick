@@ -13,6 +13,16 @@ var linux = stream
     .groupBy('host')
   |deadman(1.0, 120s)
 
+var windows = stream
+  |from()
+    .database(db)
+    .retentionPolicy(rp)
+    .measurement('win_cpu')
+    //.where(lambda: "kernel" == 'Linux' )
+    //.where(lambda: "team" != 'yellow' )
+    .groupBy('host')
+  |deadman(1.0, 120s)
+
 //var alert = linux
 //  |alert()
 //    .id('[kapacitor] {{ index .Tags "host"}}')
@@ -26,5 +36,14 @@ linux
     .value('{{ index .Fields "emitted" }}')
     .resource('{{ index .Tags "host"}}')
 
+windows
+  .alerta()
+    .id('[kapacitor] {{ index .Tags "host"}}')
+    .message('{{ .ID }} is {{ .Level }} no metrics in 120 seconds')
+    .value('{{ index .Fields "emitted" }}')
+    .resource('{{ index .Tags "host"}}')
+
 linux
+  |log()
+windows
   |log()
