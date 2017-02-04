@@ -18,4 +18,4 @@ alerting:
           - '"default"'
           - '"autogen"'
   alerta:
-    - {{ grains.fqdn }}:8080
+    - 192.168.56.162:8080
