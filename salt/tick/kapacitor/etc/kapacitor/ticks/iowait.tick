@@ -1,11 +1,7 @@
 // Parameters
-var info = 40
+var info = 30
 var warn = 60
-var crit = 75
-
-var sig_info = 3
-var sig_warn = 4
-var sig_crit = 5
+var crit = 90
 
 var period = 1m
 var every = 1m
@@ -15,7 +11,7 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-var data = stream
+var linux = stream
   |from()
     .database(db)
     .retentionPolicy(rp)
@@ -26,24 +22,17 @@ var data = stream
   |window()
     .period(period)
     .every(every)
-  |min('usage_iowait')
+  |mean('usage_iowait')
     .as('stat')
 
-var alert = data
+linux
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} is {{ .Level }} value: {{ index .Fields "stat"}}')
-
-var static = alert
-  .info(lambda: "stat" > info)
-  .warn(lambda: "stat" > warn)
-  .crit(lambda: "stat" > crit)
-
-static
-  .alerta()
-    .value('{{ index .Fields "stat" }}')
-    .resource('{{ index .Tags "host"}}')
-
-//alert
-//  .stateChangesOnly(suppress)
-//  .email()
+    .message('{{ .ID }} CPU iowait is {{ .Level }} value: {{ index .Fields "stat"}}')
+    .info(lambda: "stat" > info)
+    .warn(lambda: "stat" > warn)
+    .crit(lambda: "stat" > crit)
+    .alerta()
+      .value('{{ index .Fields "stat" }}')
+      .resource('{{ index .Tags "host"}}')
+  |log()

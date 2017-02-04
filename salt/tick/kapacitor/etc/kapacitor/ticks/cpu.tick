@@ -1,7 +1,7 @@
 // Parameters
-var usage_info = 25
-var usage_warn = 10
-var usage_crit = 5
+var info = 25
+var warn = 10
+var crit = 5
 
 var period = 1m
 var every = 1m
@@ -29,9 +29,9 @@ linux
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
     .message('{{ .ID }} CPU idle is {{ .Level }} value: {{ index .Fields "stat"}}')
-    .info(lambda: "stat" < usage_info)
-    .warn(lambda: "stat" < usage_warn)
-    .crit(lambda: "stat" < usage_crit)
+    .info(lambda: "stat" < info)
+    .warn(lambda: "stat" < warn)
+    .crit(lambda: "stat" < crit)
     .alerta()
       .value('{{ index .Fields "stat" }}')
       .resource('{{ index .Tags "host"}}')

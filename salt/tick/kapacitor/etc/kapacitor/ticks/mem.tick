@@ -11,9 +11,7 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-var measure = 'mem'
-
-var data = stream
+var linux = stream
   |from()
     .database(db)
     .retentionPolicy(rp)
@@ -23,24 +21,18 @@ var data = stream
   |window()
     .period(period)
     .every(every)
-  |min('used_percent')
+  |mean('used_percent')
     .as('stat')
 
-var alert = data
+linux
+  |log()
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} is {{ .Level }} value: {{ index .Fields "stat"}}')
-
-var static = alert
-  .info(lambda: "stat" > info)
-  .warn(lambda: "stat" > warn)
-  .crit(lambda: "stat" > crit)
-
-static
-  .alerta()
-    .value('{{ index .Fields "stat" }}')
-    .resource('{{ index .Tags "host"}}')
-
-//alert
-//  .stateChangesOnly(suppress)
-//  .email()
+    .message('{{ .ID }} memory usage is {{ .Level }} value: {{ index .Fields "stat"}}')
+    .info(lambda: "stat" > info)
+    .warn(lambda: "stat" > warn)
+    .crit(lambda: "stat" > crit)
+    .alerta()
+      .value('{{ index .Fields "stat" }}')
+      .resource('{{ index .Tags "host"}}')
+  |log()
