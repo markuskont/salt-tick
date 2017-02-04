@@ -1,7 +1,7 @@
 // Parameters
-var info = 50
-var warn = 25
-var crit = 5
+var usage_info = 25
+var usage_warn = 10
+var usage_crit = 5
 
 var period = 1m
 var every = 1m
@@ -11,7 +11,7 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-var data = stream
+var linux = stream
   |from()
     .database(db)
     .retentionPolicy(rp)
@@ -22,24 +22,17 @@ var data = stream
   |window()
     .period(period)
     .every(every)
-  |min('usage_idle')
+  |mean('usage_idle')
     .as('stat')
 
-var alert = data
+linux
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} is {{ .Level }} value: {{ index .Value "stat"}}')
-
-var static = alert
-  .info(lambda: "stat" > info)
-  .warn(lambda: "stat" > warn)
-  .crit(lambda: "stat" > crit)
-
-static
-  .alerta()
-    .value('{{ index .Fields "stat" }}')
-    .resource('{{ index .Tags "host"}}')
-
-//alert
-//  .stateChangesOnly(suppress)
-//  .email()
+    .message('{{ .ID }} CPU idle is {{ .Level }} value: {{ index .Fields "stat"}}')
+    .info(lambda: "stat" < usage_info)
+    .warn(lambda: "stat" < usage_warn)
+    .crit(lambda: "stat" < usage_crit)
+    .alerta()
+      .value('{{ index .Fields "stat" }}')
+      .resource('{{ index .Tags "host"}}')
+  |log()
