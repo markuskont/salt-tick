@@ -21,7 +21,9 @@ include:
     - bits: 4096
     - require:
       - {{ map.conf_dir }}/ssl
+      {% if grains.kernel == 'Linux' %}
       - pkg: python-m2crypto
+      {% endif %}
 
 {{ map.conf_dir }}/ssl/telegraf.cert:
   x509.certificate_managed:
@@ -35,7 +37,9 @@ include:
     #  - name: {{ map.conf_dir }}/ssl/telegraf.private
     #  - bits: 4096
     - require:
+      {% if grains.kernel == 'Linux' %}
       - pkg: python-m2crypto
+      {% endif %}
       - file: {{ map.conf_dir }}/ssl
       - x509: {{ map.conf_dir }}/ssl/telegraf.private
 
