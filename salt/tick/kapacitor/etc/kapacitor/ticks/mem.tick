@@ -16,7 +16,7 @@ var linux = stream
     .database(db)
     .retentionPolicy(rp)
     .measurement('mem')
-    //.where(lambda: "team" != 'yellow' )
+    .where(lambda: "team" != 'yellow' )
     .groupBy('host')
   |window()
     .period(period)
@@ -25,7 +25,7 @@ var linux = stream
     .as('stat')
 
 linux
-  |log()
+//  |log()
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
     .message('{{ .ID }} memory usage is {{ .Level }} value: {{ index .Fields "stat"}}')

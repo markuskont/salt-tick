@@ -17,7 +17,7 @@ var linux = stream
     .retentionPolicy(rp)
     .measurement('cpu')
     .where(lambda: "cpu" == 'cpu-total')
-    //.where(lambda: "team" != 'yellow' )
+    .where(lambda: "team" != 'yellow' )
     .groupBy('host')
   |window()
     .period(period)

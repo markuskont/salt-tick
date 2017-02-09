@@ -11,21 +11,8 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-//var data = stream
-//  |from()
-//    .database(db)
-//    .retentionPolicy(rp)
-//    .measurement('system')
-//    .groupBy('host')
-//  |window()
-//    .period(period)
-//    .every(every)
-//  |mean('load1')
-//    .as('stat')
-//  |log()
-
 var data = batch
-  |query('''SELECT max(load1) AS stat FROM "telegraf"."autogen"."system" WHERE "team" = 'blue' ''')
+  |query('''SELECT mean(Available_Bytes) AS stat FROM "telegraf"."autogen"."win_mem" ''')
     .period(period)
     .every(every)
     .groupBy('host')
@@ -37,7 +24,7 @@ data
     .keep()
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} Load is {{ .Level }} number of standard deviations exceeded threshold. Raw value is {{ index .Fields "stat" }}')
+    .message('{{ .ID }} available memory is {{ .Level }}, number of standard deviations exceeded threshold. Raw value is {{ index .Fields "stat" }}')
     //.message('{{ .ID }} Load1 is {{ .Level }} value: {{ index .Fields "stat"}} Sigma: {{ index .Fields "sigma" }}')
     .info(lambda: "sigma" > info_sig)
     .warn(lambda: "sigma" > warn_sig)

@@ -9,7 +9,7 @@ var linux = stream
     .retentionPolicy(rp)
     .measurement('cpu')
     //.where(lambda: "kernel" == 'Linux' )
-    //.where(lambda: "team" != 'yellow' )
+    .where(lambda: "team" != 'yellow' )
     .groupBy('host')
   |deadman(1.0, 120s)
 

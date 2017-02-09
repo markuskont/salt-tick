@@ -11,21 +11,14 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-var linux = stream
-  |from()
-    .database(db)
-    .retentionPolicy(rp)
-    .measurement('cpu')
-    .where(lambda: "cpu" == 'cpu-total')
-    .where(lambda: "team" != 'yellow' )
-    .groupBy('host')
-  |window()
+var data = batch
+  |query('''SELECT mean(Percent_Idle_Time) AS stat FROM "telegraf"."autogen"."win_cpu" ''')
     .period(period)
     .every(every)
-  |mean('usage_idle')
-    .as('stat')
+    .groupBy('host')
 
-linux
+data
+  //|log()
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
     .message('{{ .ID }} CPU idle is {{ .Level }} value: {{ index .Fields "stat"}}')

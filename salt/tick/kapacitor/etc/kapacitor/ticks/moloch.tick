@@ -1,0 +1,31 @@
+var info_sig = 1.5
+
+var warn_sig = 2.5
+
+var crit_sig = 5
+
+var period = 5m
+var every = 30s
+
+var data = batch
+  |query('''SELECT sum(count) AS stat2 FROM "telegraf"."autogen"."moloch_spi_queries" ''')
+    .period(period)
+    .every(every)
+    .groupBy('src_ip', 'query', time(every))
+
+// Thresholds
+data
+  |eval(lambda: sigma("stat"))
+    .as('sigma')
+    .keep()
+  |alert()
+    .id('[kapacitor] {{ index .Tags "query"}}')
+    .message('{{ .ID }} {{ .Level }} number of standard deviations exceeded threshold. Raw value is {{ index .Fields "stat" }}')
+    .info(lambda: "sigma" > info_sig)
+    .warn(lambda: "sigma" > warn_sig)
+    .crit(lambda: "sigma" > crit_sig)
+    .alerta()
+      .value('{{ index .Fields "sigma" }}')
+      .resource('{{ index .Tags "src_ip"}}')
+    .log('/var/log/kapacitor/otta.log')
+  |log()
