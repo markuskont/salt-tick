@@ -1,5 +1,5 @@
 include:
-  - tick.common.m2crypto
+  - tick.common.deps
 
 {% set conf_dir = '/etc/kapacitor' %}
 
@@ -9,7 +9,7 @@ include:
     - user: kapacitor
     - require:
       - pkg: kapacitor
-      - pkg: python-m2crypto
+      - pkg: tick.dep
 
 {{ conf_dir }}/ssl/ca.pem:
   file.managed:

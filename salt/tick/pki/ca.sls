@@ -1,5 +1,5 @@
 include:
-  - tick.common.m2crypto
+  - tick.common.deps
 
 salt-minion:
   service.running:
@@ -39,7 +39,7 @@ salt-minion:
     - backup: True
     - require:
       - file: {{ pillar.metrix.pki.dir }}
-      - pkg: python-m2crypto
+      - pkg: tick.dep
       - x509: {{ pillar.metrix.pki.dir }}/ca.key
 
 cp.push ca.crt:

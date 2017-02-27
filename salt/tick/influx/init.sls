@@ -1,6 +1,6 @@
 include:
   - tick.repo
-  - tick.common.apt-https
+  - tick.common.deps
   - tick.influx.install
   - tick.influx.query
   - tick.influx.tls

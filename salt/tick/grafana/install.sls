@@ -14,7 +14,7 @@ grafana:
     - key_url: https://packagecloud.io/gpg.key
     - clean_file: true
     - require:
-      - pkg: apt-transport-https
+      - pkg: tick.dep
   pkg.latest:
     - refresh: True
   service.running:
