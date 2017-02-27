@@ -10,4 +10,4 @@ tick_repo:
     - file: /etc/apt/sources.list.d/influxdata.list
     - clean_file: True
     - require:
-      - pkg: apt-transport-https
+      - pkg: tick.dep
