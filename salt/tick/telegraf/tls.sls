@@ -22,7 +22,7 @@ include:
     - require:
       - {{ map.conf_dir }}/ssl
       {% if grains.kernel == 'Linux' %}
-      - pkg: python-m2crypto
+      - pkg: tick.dep
       {% endif %}
 
 {{ map.conf_dir }}/ssl/telegraf.cert:
