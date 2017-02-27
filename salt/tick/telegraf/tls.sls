@@ -1,7 +1,7 @@
 {% from "tick/telegraf/map.jinja" import map with context %}
 
 include:
-  - tick.common.m2crypto
+  - tick.common.deps
 
 {{ map.conf_dir }}/ssl:
   file.directory:
@@ -38,7 +38,7 @@ include:
     #  - bits: 4096
     - require:
       {% if grains.kernel == 'Linux' %}
-      - pkg: python-m2crypto
+      - pkg: tick.dep
       {% endif %}
       - file: {{ map.conf_dir }}/ssl
       - x509: {{ map.conf_dir }}/ssl/telegraf.private

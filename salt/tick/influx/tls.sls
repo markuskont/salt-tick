@@ -1,5 +1,5 @@
 include:
-  - tick.common.m2crypto
+  - tick.common.deps
 
 {% set conf_dir = '/etc/influxdb' %}
 
@@ -9,7 +9,7 @@ include:
     - user: influxdb
     - require:
       - pkg: influxdb
-      - pkg: python-m2crypto
+      - pkg: tick.dep
 
 {{ conf_dir }}/ssl/influx.private:
   x509.private_key_managed:
@@ -25,9 +25,6 @@ include:
     - days_remaining: 30
     - backup: True
     - public_key: {{ conf_dir }}/ssl/influx.private
-    #- managed_private_key:
-    #  - name: {{ conf_dir }}/ssl/influx.private
-    #  - bits: 4096
     - require:
       - file: {{ conf_dir }}/ssl
 

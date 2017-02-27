@@ -1,6 +1,6 @@
 {% set os = grains.get('os')|lower %}
 include:
-  - tick.common.apt-https
+  - tick.common.deps
 
 tick_repo:
   pkgrepo.managed:
