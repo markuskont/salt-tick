@@ -20,11 +20,17 @@ grafana:
   service.running:
     - name: grafana-server
     - enable: True
-#    - watch:
-#      - file: /etc/grafana/grafana.ini
-#
-#/etc/grafana/grafana.ini:
-#  file.managed:
-#    - mode: 644
-#    - source: salt://influxdb/grafana.jinja
-#    - template: jinja
+    - watch:
+      - file: /etc/grafana/grafana.ini
+
+/etc/grafana/grafana.ini:
+  file.managed:
+    - mode: 644
+    - source: salt://tick/grafana/etc/grafana/grafana.ini
+    - template: jinja
+    - default:
+      key: '/etc/grafana/ssl/key.pem'
+      cert: '/etc/grafana/ssl/cert.pem'
+    - require:
+      - file: '/etc/grafana/ssl/key.pem'
+      - file: '/etc/grafana/ssl/cert.pem'
