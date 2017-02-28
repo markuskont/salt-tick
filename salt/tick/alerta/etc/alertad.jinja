@@ -5,7 +5,10 @@ LOGGER_NAME = 'alerta'
 LOG_FILE = None
 
 CORS_ORIGINS = [
+  'http://{{ grains.fqdn }}',
 {% for interface, addrs in ip4_interfaces.items() %}
-	'http://{{addrs[0]}}',
+  {% if addrs[0] != '127.0.0.1' %}
+  'http://{{addrs[0]}}',
+	{% endif %}
 {% endfor %}
 ]

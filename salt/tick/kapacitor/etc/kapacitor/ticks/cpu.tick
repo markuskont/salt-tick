@@ -1,9 +1,9 @@
 // Parameters
-var info = 25
-var warn = 10
-var crit = 5
+var info = 75
+var warn = 90
+var crit = 99
 
-var period = 1m
+var period = 5m
 var every = 1m
 
 var suppress = 5m
@@ -11,28 +11,43 @@ var suppress = 5m
 var db = 'telegraf'
 var rp = 'autogen'
 
-var linux = stream
+var data = stream
   |from()
     .database(db)
     .retentionPolicy(rp)
     .measurement('cpu')
-    .where(lambda: "cpu" == 'cpu-total')
-    .where(lambda: "team" != 'yellow' )
     .groupBy('host')
+    .where(lambda: "cpu" == 'cpu-total')
+  |eval(lambda: "usage_user" + "usage_system")
+    .as('usage_total')
+    .keep()
   |window()
     .period(period)
     .every(every)
-  |mean('usage_idle')
+  |mean('usage_total')
     .as('stat')
 
-linux
+var alert = data
   |alert()
     .id('[kapacitor] {{ index .Tags "host"}}')
-    .message('{{ .ID }} CPU idle is {{ .Level }} value: {{ index .Fields "stat"}}')
-    .info(lambda: "stat" < info)
-    .warn(lambda: "stat" < warn)
-    .crit(lambda: "stat" < crit)
-    .alerta()
-      .value('{{ index .Fields "stat" }}')
-      .resource('{{ index .Tags "host"}}')
-  |log()
+    .message('{{ .ID }} CPU usage is {{ .Level }} value: {{ index .Fields "stat"}}')
+    .info(lambda: "stat" > info)
+    .warn(lambda: "stat" > warn)
+    .crit(lambda: "stat" > crit)
+
+alert
+  .alerta()
+    .value('{{ index .Fields "stat" }}')
+    .resource('{{ index .Tags "host"}}')
+
+alert
+  .details('''
+<h1>{{ .ID }}</h1>
+<b>{{ .Message }}</b>
+Value: {{ index .Fields "stat" }}
+System: {{ index .Fields "usage_system" }}
+User: {{ index .Fields "usage_user" }}
+''')
+  .stateChangesOnly()
+  .flapping(0.25, 0.5)
+  .email()
