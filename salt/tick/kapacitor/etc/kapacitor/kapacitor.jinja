@@ -110,6 +110,19 @@ default-retention-policy = ""
   origin = "kapacitor"
 {% endfor %}
 
+[smtp]
+  enabled = {{pillar.alerting.smtp.enabled}}
+  host = "{{pillar.alerting.smtp.host}}"
+  port = {{pillar.alerting.smtp.port}}
+  username = "{{pillar.alerting.smtp.username}}"
+  password = "{{pillar.alerting.smtp.password}}"
+  from = "{{pillar.alerting.smtp.from}}"
+  to = [{{pillar.alerting.smtp.to|join(", ") }}]
+  no-verify = false
+  idle-timeout = "30s"
+  global = false
+  state-changes-only = false
+
 [kubernetes]
   # Enable/Disable the kubernetes service.
   # Needed by the k8sAutoscale TICKscript node.
@@ -131,35 +144,6 @@ default-retention-policy = ""
   #   api-servers = ["http://192.168.99.100:8443"]
   #   token = "..."
   #   ca-path = "/path/to/kubernetes/ca.crt"
-
-
-
-[smtp]
-  # Configure an SMTP email server
-  # Will use TLS and authentication if possible
-  # Only necessary for sending emails from alerts.
-  enabled = false
-  host = "localhost"
-  port = 25
-  username = ""
-  password = ""
-  # From address for outgoing mail
-  from = ""
-  # List of default To addresses.
-  # to = ["oncall@example.com"]
-
-  # Skip TLS certificate verify when connecting to SMTP server
-  no-verify = false
-  # Close idle connections after timeout
-  idle-timeout = "30s"
-
-  # If true the all alerts will be sent via Email
-  # without explicitly marking them in the TICKscript.
-  global = false
-  # Only applies if global is true.
-  # Sets all alerts in state-changes-only mode,
-  # meaning alerts will only be sent if the alert state changes.
-  state-changes-only = false
 
 [opsgenie]
     # Configure OpsGenie with your API key and default routing key.

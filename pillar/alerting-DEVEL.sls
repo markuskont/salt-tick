@@ -19,3 +19,12 @@ alerting:
           - '"autogen"'
   alerta:
     - 192.168.56.162:8080
+  smtp:
+    enabled: 'true'
+    host: localhost
+    port: 25
+    username: ''
+    password: ''
+    from: 'kapacitor@localhost'
+    to:
+      - '"root@localhost"'
