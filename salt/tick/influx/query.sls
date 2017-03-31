@@ -3,6 +3,10 @@ ensure_pkgs:
     - pkgs:
       - curl
 
+wait_influx_startup:
+  cmd.run:
+    - name: sleep 15
+
 create_admin_user:
   cmd.run:
     - name: curl -ss -k -XPOST https://{{ grains.fqdn }}:8086/query --data-urlencode "q=CREATE USER "{{ pillar.influx.admin.user }}" WITH PASSWORD '{{ pillar.influx.admin.pw }}' WITH ALL PRIVILEGES"
@@ -11,6 +15,7 @@ create_admin_user:
       - file: /etc/influxdb/influxdb.conf
       - service: influxdb
       - pkg: ensure_pkgs
+      - cmd: wait_influx_startup
 
 /etc/influxdb/helpers:
   file.directory:
@@ -37,3 +42,4 @@ create_databases:
       - file: /etc/influxdb/helpers/check_grants.py
       - service: influxdb
       - file: /etc/influxdb/influxdb.conf
+      - cmd: wait_influx_startup

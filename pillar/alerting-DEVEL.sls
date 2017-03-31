@@ -28,3 +28,9 @@ alerting:
     from: 'kapacitor@localhost'
     to:
       - '"root@localhost"'
+  slack:
+    enabled: 'false'
+    url: 'https://hooks.slack.com/services/XXXXXXXX/XXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXX'
+    channel: '#alerts'
+    global: 'false'
+    statechangesonly: 'false'
