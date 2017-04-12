@@ -7,7 +7,9 @@
   osfamily = "{{ grains.os_family }}"
   osrelease = "{{ grains.osrelease }}"
   kernel = "{{ grains.kernel }}"
+  {% if 'virtual' in grains %}
   virtual = "{{ grains.virtual }}"
+  {% endif %}
   init = "{{ grains.init }}"
   environment = "{{ saltenv }}"
   {% if grains.company is defined %}
