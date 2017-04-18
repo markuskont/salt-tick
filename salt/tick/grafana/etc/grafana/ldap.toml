@@ -1,0 +1,26 @@
+verbose_logging = {{ pillar.grafana_ldap.verbose_logging }}
+
+[[servers]]
+host = "{{ pillar.grafana_ldap.servers.host }}"
+port = {{ pillar.grafana_ldap.servers.port }}
+use_ssl = {{ pillar.grafana_ldap.servers.use_ssl }}
+ssl_skip_verify = {{ pillar.grafana_ldap.servers.ssl_skip_verify }}
+bind_dn = "{{ pillar.grafana_ldap.servers.bind_dn }}"
+bind_password = '{{ pillar.grafana_ldap.servers.bind_password }}'
+search_filter = "{{ pillar.grafana_ldap.servers.search_filter }}"
+search_base_dns = {{ pillar.grafana_ldap.servers.search_base_dns }}
+group_search_base_dns = {{ pillar.grafana_ldap.servers.group_search_base_dns }}
+
+[servers.attributes]
+name = "{{ pillar.grafana_ldap.attributes.name }}"
+surname = "{{ pillar.grafana_ldap.attributes.surname }}"
+username = "{{ pillar.grafana_ldap.attributes.username }}"
+member_of = "{{ pillar.grafana_ldap.attributes.member_of }}"
+email =  "{{ pillar.grafana_ldap.attributes.email }}"
+
+{% for mapping in pillar.grafana_ldap.group_mappings %}
+[[servers.group_mappings]]
+group_dn = "{{ mapping.group_dn }}"
+org_role = "{{ mapping.org_role }}"
+org_id = 1
+{% endfor %}

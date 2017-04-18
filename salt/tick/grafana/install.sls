@@ -23,6 +23,9 @@ grafana:
     - enable: True
     - watch:
       - file: {{ conf_dir }}/grafana.ini
+      {% if 'grafana_ldap' in pillar %}
+      - file: {{ pillar.grafana.ldap.config_file }}
+      {% endif %}
 
 {{ conf_dir }}/grafana.ini:
   file.managed:
@@ -36,3 +39,11 @@ grafana:
     - require:
       - file: '{{ conf_dir }}/ssl/key.pem'
       - file: '{{ conf_dir }}/ssl/cert.pem'
+
+{% if 'grafana_ldap' in pillar %}
+{{ pillar.grafana.ldap.config_file }}:
+  file.managed:
+    - mode: 644
+    - source: salt://tick/grafana/etc/grafana/ldap.toml
+    - template: jinja
+{% endif %}
