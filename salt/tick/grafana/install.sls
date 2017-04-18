@@ -40,7 +40,7 @@ grafana:
       - file: '{{ conf_dir }}/ssl/key.pem'
       - file: '{{ conf_dir }}/ssl/cert.pem'
 
-{% if 'ldap' in pillar.grafana %}
+{% if 'grafana_ldap' in pillar %}
 {{ pillar.grafana.ldap.config_file }}:
   file.managed:
     - mode: 640
