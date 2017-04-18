@@ -14,3 +14,10 @@ influx:
       perms:
         telegraf: READ
         writeback: READ
+
+grafana:
+  ssl: true
+  ldap:
+    enabled: 'false'
+    config_file: '/etc/grafana/ldap.toml'
+    allow_sign_up: 'false'

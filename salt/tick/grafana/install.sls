@@ -1,4 +1,5 @@
 {% set os = grains.get('os')|lower %}
+{% set conf_dir = '/etc/grafana' %}
 
 grafana:
   pkgrepo.managed:
@@ -21,16 +22,17 @@ grafana:
     - name: grafana-server
     - enable: True
     - watch:
-      - file: /etc/grafana/grafana.ini
+      - file: {{ conf_dir }}/grafana.ini
 
-/etc/grafana/grafana.ini:
+{{ conf_dir }}/grafana.ini:
   file.managed:
     - mode: 644
     - source: salt://tick/grafana/etc/grafana/grafana.ini
     - template: jinja
     - default:
-      key: '/etc/grafana/ssl/key.pem'
-      cert: '/etc/grafana/ssl/cert.pem'
+      key: '{{ conf_dir }}/ssl/key.pem'
+      cert: '{{ conf_dir }}/ssl/cert.pem'
+      conf_dir: {{ conf_dir }}
     - require:
-      - file: '/etc/grafana/ssl/key.pem'
-      - file: '/etc/grafana/ssl/cert.pem'
+      - file: '{{ conf_dir }}/ssl/key.pem'
+      - file: '{{ conf_dir }}/ssl/cert.pem'
