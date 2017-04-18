@@ -43,7 +43,10 @@ grafana:
 {% if 'grafana_ldap' in pillar %}
 {{ pillar.grafana.ldap.config_file }}:
   file.managed:
-    - mode: 644
+    - mode: 640
+    - user: grafana
     - source: salt://tick/grafana/etc/grafana/ldap.toml
     - template: jinja
+    - require:
+      - pkg: grafana
 {% endif %}
