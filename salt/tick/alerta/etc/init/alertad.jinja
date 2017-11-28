@@ -8,5 +8,5 @@ stop on runlevel [016]
 respawn
 
 script
-  exec alertad 2>&1 | logger -t alerta-server -p daemon.notice
+  exec /usr/local/bin/alertad run --host 0.0.0.0 --port 8080 2>&1 | logger -t alerta-server -p daemon.notice
 end script

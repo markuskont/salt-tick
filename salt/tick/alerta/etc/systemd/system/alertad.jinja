@@ -3,7 +3,7 @@ Description=Alerta API process
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/alertad
+ExecStart=/usr/local/bin/alertad run --host 0.0.0.0 --port 8080
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

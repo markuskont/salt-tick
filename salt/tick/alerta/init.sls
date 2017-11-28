@@ -24,6 +24,11 @@ alerta-server:
     - require:
       - alerta_build_pkgs
 
+alerta:
+  pip.installed:
+    - require:
+      - alerta_build_pkgs
+
 {{server_config}}:
   file.managed:
     - source: salt://tick/alerta/etc/alertad.jinja
